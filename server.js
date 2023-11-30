@@ -2,11 +2,19 @@ const express = require('express');
 const axios = require('axios');
 require('dotenv').config();
 const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
+
 const app = express();
 app.use(cors());
 
 
-// Get all systems
+// Function to delay execution by a specified time (in milliseconds)
+function delay(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// Get all systems, only need to do this once (must run before 11am)
 app.get('/api/getSystemsIdName', async (req, res) => {
     try {
         // Make an initial API call to get all system IDs
@@ -19,11 +27,19 @@ app.get('/api/getSystemsIdName', async (req, res) => {
         // Use Promise.all to concurrently fetch system names for all system IDs
         const promises = systemIds.map(async (systemId) => {
             const systemResponse = await axios.get(`https://esi.evetech.net/latest/universe/systems/${systemId}/`);
+            await delay(1000);
             const systemName = systemResponse.data.name;
             systemIDsAndNames.push({ id: systemId, name: systemName });
         });
 
         await Promise.all(promises);
+        
+        // save systemIDsAndNames as CSV
+        // Write systemNames to a CSV file
+        const csvData = systemIDsAndNames.map((system) => `${system.id},${system.name}`).join('\n');
+        const filePath = path.join('csv/', 'systemIDsAndNames.csv');
+        
+        fs.writeFileSync(filePath, csvData);
 
         // Send the system names as JSON response
         res.json(systemIDsAndNames);
@@ -32,9 +48,7 @@ app.get('/api/getSystemsIdName', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-// log system ID:name
-
-// get system by name
+// get system by name (search in csv)
 
 // get main markets, Jita, Rens, Hek
 
