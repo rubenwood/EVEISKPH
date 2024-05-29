@@ -48,10 +48,15 @@ app.get('/api/getSystemsIdName', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-// get system by name (search in csv)
+// Get system by name (search in csv)
 
-// get main markets, Jita, Rens, Hek
+// Get main markets, Jita, Rens, Hek
+// https://www.adam4eve.eu/
+// Jita - 30000142
+// Rens - 30002510
+// Hek - 30002053
 
+// Get player wallet (requires authentication)
 
 const PORT = process.env.PORT;
 

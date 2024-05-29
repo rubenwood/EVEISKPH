@@ -1,0 +1,12 @@
+input[type=button] {
+    background-color: #33bef6;
+    color: black;
+    font-family: "Reddit Mono", monospace;
+    font-style: normal;
+    font-weight: 600;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
